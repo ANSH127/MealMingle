@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native'
 import { TextInput } from 'react-native'
 import Loadar from '../components/Loadar'
 import { colors } from '../theme'
+import { auth } from '../config/firebase'
 
 export default function PostLoginScreen({ navigation }) {
   const [loading, setLoading] = React.useState(false)
@@ -13,7 +14,21 @@ export default function PostLoginScreen({ navigation }) {
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
 
-  const handleSignIn = () => {
+  const handleLogout = async() => {
+    setLoading(true)
+    try {
+      await auth.signOut()
+      Alert.alert('Logged out successfully')
+      navigation.navigate('Login')
+    } catch (error) {
+      console.log(error);
+      Alert.alert(error.message)
+    }
+    finally {
+      setLoading(false)
+    }
+
+
   }
 
 
@@ -41,7 +56,7 @@ export default function PostLoginScreen({ navigation }) {
           {
             loading ? <Loadar /> :
               <TouchableOpacity className={`p-3  rounded-2xl bg-orange-400  ${colors.button}`}
-                onPress={handleSignIn} >
+                onPress={handleLogout} >
                 <Text className={`text-center  text-white text-xl `}>Logout</Text>
               </TouchableOpacity>}
         </View>
