@@ -7,9 +7,9 @@ import { TouchableOpacity } from 'react-native'
 import { TextInput } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
+import Loadar from '../components/Loadar'
 
-
-export default function LoginScreen() {
+export default function LoginScreen({ navigation}) {
   const [loading, setLoading] = React.useState(false)
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
@@ -23,6 +23,7 @@ export default function LoginScreen() {
       setTimeout(() => {
         setLoading(false)
       }, 3000)
+
     }
   }
   return(
@@ -31,12 +32,12 @@ export default function LoginScreen() {
         <View className='h-full bg-white'>
           <SafeAreaView className='flex' >
 
-            <View className='pt-7 px-7 justify-center mb-5'>
-              <Text className='text-5xl font-semibold '>
+            <View className='pt-7 px-7 justify-center '>
+              <Text className='text-4xl font-semibold '>
                 Login to your
               </Text>
               <View className='justify-center'>
-                <Text className={`text-5xl font-bold ${colors.heading}`} >
+                <Text className={`text-4xl font-bold text-orange-400 ${colors.heading}`} >
                   account.
                 </Text>
               </View>
@@ -71,13 +72,13 @@ export default function LoginScreen() {
                   <Ionicons name={isPasswordHidden ? 'eye-off' : 'eye'} size={24} color='black' />
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity className='flex items-end my-2' onPress={() => navigation.navigate('Reset')} >
+              <TouchableOpacity className='flex items-end my-2' onPress={() => navigation.navigate('ForgetPass')} >
                 <Text className={`text-right mr-4 ${colors.heading} font-bold`}>Forgot Password?</Text>
               </TouchableOpacity>
 
               {
                 loading ? <Loadar /> :
-                  <TouchableOpacity className={`p-3  rounded-2xl ${colors.button}`}
+                  <TouchableOpacity className={`p-3  rounded-2xl bg-orange-400  ${colors.button}`}
                     onPress={handleSignIn} >
                     <Text className={`text-center  text-white text-xl `}>Sign In</Text>
                   </TouchableOpacity>}
@@ -102,7 +103,9 @@ export default function LoginScreen() {
 
 
             <View className='flex-row justify-center mt-2'>
-              <Text className=' text-gray-500 font-bold '>Don't have an account?</Text>
+              <Text className=' text-gray-500 font-bold '
+              onPress={() => navigation.navigate('SignUp')}
+              >Don't have an account?</Text>
               <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
                 <Text className={` font-bold ${colors.heading}`} >Register</Text>
               </TouchableOpacity>

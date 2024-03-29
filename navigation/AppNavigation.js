@@ -7,6 +7,7 @@ import LoginScreen from '../screens/LoginScreen';
 import PostLoginScreen from '../screens/PostLoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
+import ForgetPassScreen from '../screens/ForgetPassScreen';
 export default function AppNavigation() {
     const Stack = createNativeStackNavigator();
   return (
@@ -21,6 +22,7 @@ export default function AppNavigation() {
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="SignUp" component={SignUpScreen} />
             <Stack.Screen name="PostLogin" component={PostLoginScreen} />
+            <Stack.Screen name="ForgetPass" component={ForgetPassScreen} />
         </Stack.Navigator>
     </NavigationContainer>
   )
