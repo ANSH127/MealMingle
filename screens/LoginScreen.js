@@ -18,11 +18,14 @@ export default function LoginScreen({ navigation}) {
   const handleSignIn = () => {
     if (email === '' || password === '') {
       Alert.alert('Please fill all the fields')
+      navigation.navigate('PostLogin')
+
     } else {
       setLoading(true)
       setTimeout(() => {
         setLoading(false)
-      }, 3000)
+        navigation.navigate('PostLogin')
+      }, 1000)
 
     }
   }

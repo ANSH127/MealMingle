@@ -9,21 +9,25 @@ import SignUpScreen from '../screens/SignUpScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import ForgetPassScreen from '../screens/ForgetPassScreen';
 export default function AppNavigation() {
-    const Stack = createNativeStackNavigator();
+  const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-        <Stack.Navigator 
+      <Stack.Navigator
         initialRouteName='Login'
         screenOptions={{
-            headerShown: false
+          headerShown: false
         }}
-        >
-            <Stack.Screen name="Welcome" component={WelcomeScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="SignUp" component={SignUpScreen} />
-            <Stack.Screen name="PostLogin" component={PostLoginScreen} />
-            <Stack.Screen name="ForgetPass" component={ForgetPassScreen} />
-        </Stack.Navigator>
+      >
+        <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
+        <Stack.Screen name="PostLogin" component={PostLoginScreen}
+          options={{
+            presentation: 'modal'
+          }}
+        />
+        <Stack.Screen name="ForgetPass" component={ForgetPassScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   )
 }
