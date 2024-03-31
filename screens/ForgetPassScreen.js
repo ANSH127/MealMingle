@@ -5,20 +5,32 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { TouchableOpacity } from 'react-native'
 import { useState } from 'react';
 import Loadar from '../components/Loadar'
+import { auth } from '../config/firebase'
+import { sendPasswordResetEmail } from 'firebase/auth'
 
 
 export default function ForgetPassScreen({ navigation }) {
     const [loading, setLoading] = React.useState(false)
     const [email, setEmail] = React.useState('')
 
-    const handleSignIn = () => {
+    const handlePasswordReset = async() => {
         if (email === '' ) {
             Alert.alert('Please fill all the fields')
         } else {
             setLoading(true)
-            setTimeout(() => {
+            try {
+                await sendPasswordResetEmail(auth, email)
+                Alert.alert('Password reset email sent')
+                navigation.navigate('Login')
+            } catch (error) {
+                console.log(error);
+                Alert.alert(error.message)
+            }
+            finally {
+                setEmail('')
                 setLoading(false)
-            }, 3000)
+            }
+
         }
     }
     return (
@@ -52,7 +64,7 @@ export default function ForgetPassScreen({ navigation }) {
                         {
                             loading ? <Loadar /> :
                                 <TouchableOpacity className={`p-3  rounded-2xl ${colors.button}`}
-                                    onPress={handleSignIn} >
+                                    onPress={handlePasswordReset} >
                                     <Text className={`text-center  text-white text-xl `}>
 
                                         Send Confirmation Code
