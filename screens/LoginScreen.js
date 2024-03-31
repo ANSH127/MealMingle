@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView } from 'react-native'
+import { View, Text, Image, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView,Platform } from 'react-native'
 import React from 'react'
 import { colors } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -11,6 +11,8 @@ import Loadar from '../components/Loadar'
 import { auth } from '../config/firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 
+import * as Calendar from 'expo-calendar';
+
 
 export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = React.useState(false)
@@ -21,21 +23,22 @@ export default function LoginScreen({ navigation }) {
   const handleSignIn = async () => {
     if (email === '' || password === '') {
       Alert.alert('Please fill all the fields')
-      navigation.navigate('PostLogin')
 
     } else {
       setLoading(true)
       try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
         const user = userCredential.user
+        // console.log(user);
 
         if (!user.emailVerified) {
           Alert.alert('Please verify your email')
           return
         }
-      
+
         setEmail('')
         setPassword('')
+        await createEvent(user.displayName);
         Alert.alert('Signed in successfully')
         navigation.navigate('PostLogin')
       } catch (error) {
@@ -48,6 +51,61 @@ export default function LoginScreen({ navigation }) {
 
 
     }
+  }
+
+  const createEvent = async (userName) => {
+
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    if (status === 'granted') {
+      const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+
+      // find expo calendar id if found then create event else create calendar and then create event
+      const expoCalendar = calendars.find(cal => cal.title === 'Expo Calendar');
+      // console.log(expoCalendar);
+      const event = {
+        title: `${userName} Login Event`,
+        startDate: new Date(),
+        endDate: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes from now
+        timeZone: 'Asia/Kolkata',
+
+        location: 'Location',
+        alarms: [{ relativeOffset: -60, method: Calendar.AlarmMethod.ALERT }],
+
+      };
+      if (expoCalendar) {
+        
+
+        const eventID =await Calendar.createEventAsync(expoCalendar.id, event);
+        console.log(`Created a new event with id ${eventID}`);
+      }
+
+      else {
+        const defaultCalendarSource =
+          Platform.OS === 'ios'
+            ? await getDefaultCalendarSource()
+            : { isLocalAccount: true, name: 'Expo Calendar' };
+        const newCalendarID = await Calendar.createCalendarAsync({
+          title: 'Expo Calendar',
+          color: 'blue',
+          entityType: Calendar.EntityTypes.EVENT,
+          sourceId: defaultCalendarSource.id,
+          source: defaultCalendarSource,
+          name: 'internalCalendarName',
+          ownerAccount: 'personal',
+          accessLevel: Calendar.CalendarAccessLevel.OWNER,
+        });
+
+        const eventID = await Calendar.createEventAsync(newCalendarID, event);
+        console.log(`Created a new event with id ${eventID}`);
+      }
+
+    }
+  }
+
+
+  const getDefaultCalendarSource = async () => {
+    const defaultCalendar = await Calendar.getDefaultCalendarAsync();
+    return defaultCalendar.source;
   }
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
@@ -78,6 +136,7 @@ export default function LoginScreen({ navigation }) {
             <Text className=' ml-4 text-black font-semibold'>Email Address</Text>
             <TextInput className='p-4 mb-3 border-2 border-black text-black rounded-xl ' placeholder='Enter Email '
 
+              defaultValue={email}
               onChangeText={
                 (text) => setEmail(text)
               } />
@@ -89,6 +148,7 @@ export default function LoginScreen({ navigation }) {
                 secureTextEntry={isPasswordHidden}
                 style={{ flex: 1 }}
                 placeholder='Enter Password'
+                defaultValue={password}
                 onChangeText={(text) => setPassword(text)}
               />
               <TouchableOpacity onPress={() => setIsPasswordHidden(!isPasswordHidden)}>

@@ -30,11 +30,11 @@ export default function WelcomeScreen({ navigation }) {
 
             {/* // skip and next buttons */}
             <View className='flex-row justify-between mt-5'>
-              <Button title='Skip' color={'white'}
+              <Button title='Skip' color={'orange'}
                 onPress={() => navigation.navigate('Login')}
               />
               <View className='flex-row items-center'>
-                <Button title='Next' color={'white'}
+                <Button title='Next' color={'orange'} 
                   onPress={() => setProgress(progress + 1)}
                 />
                 <ArrowLongRightIcon color={'white'} />
@@ -64,12 +64,12 @@ export default function WelcomeScreen({ navigation }) {
 
             {/* // skip and next buttons */}
             <View className='flex-row justify-between mt-5'>
-              <Button title='Skip' color={'white'}
+              <Button title='Skip' color={'orange'}
                 onPress={() => navigation.navigate('Login')}
               />
               
               <View className='flex-row items-center'>
-                <Button title='Next' color={'white'}
+                <Button title='Next' color={'orange'}
                   onPress={() => setProgress(progress + 1)}
                 />
                 <ArrowLongRightIcon color={'white'} />
