@@ -19,9 +19,10 @@ export default function SignUpScreen({ navigation }) {
   const [password, setPassword] = React.useState('')
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [username, setUsername] = React.useState('')
+  const [isTermsChecked, setIsTermsChecked] = React.useState(false);
 
   const handleSignUp = async () => {
-    if (username === '' || email === '' || password === '') {
+    if (username === '' || email === '' || password === '' || !isTermsChecked) {
       Alert.alert('Please fill all the fields')
     } else {
       setLoading(true)
@@ -159,6 +160,14 @@ export default function SignUpScreen({ navigation }) {
               <TouchableOpacity onPress={() => setIsPasswordHidden(!isPasswordHidden)}>
                 <Ionicons name={isPasswordHidden ? 'eye-off' : 'eye'} size={24} color='black' />
               </TouchableOpacity>
+            </View>
+
+            {/* // term and condition checkbox */}
+            <View className='flex-row items-center'>
+              <TouchableOpacity onPress={() => setIsTermsChecked(!isTermsChecked)}>
+                <Ionicons name={isTermsChecked ? 'checkbox' : 'checkbox-outline'} size={24} color='orange' />
+              </TouchableOpacity>
+              <Text className='text-black ml-2'>I agree to the terms and conditions</Text>
             </View>
 
 
