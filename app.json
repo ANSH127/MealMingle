@@ -17,8 +17,10 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSCalendarsUsageDescription": "This app requires access to your calendar to create events.",
-        "NSCalendarsFullAccessUsageDescription": "This app requires access to your calendar to create events."
+        "NSCalendarsUsageDescription": "The app needs to access your calendar.",
+        "NSCalendarsFullAccessUsageDescription": "The app needs to access your calendar.",
+        "NSRemindersUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders",
+        "NSRemindersFullAccessUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders"
       }
     },
     "android": {
@@ -29,8 +31,11 @@
       "permissions": [
         "CALENDAR",
         "READ_CALENDAR",
-        "WRITE_CALENDAR"
-      ]
+        "WRITE_CALENDAR",
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR"
+      ],
+      "package": "com.ansh09.MealMingle"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,6 +47,11 @@
           "calendarPermission": "The app needs to access your calendar."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "de0edf42-81a8-4b4d-b1fc-b4bbb0000d25"
+      }
+    }
   }
 }
