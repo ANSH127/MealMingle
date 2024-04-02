@@ -27,6 +27,7 @@ const EXPO_REDIRECT_PARAMS = { useProxy: true, projectNameForProxy: '@ansh09/Mea
 const NATIVE_REDIRECT_PARAMS = { native: "com.ansh09.MealMingle://" };
 const REDIRECT_PARAMS = Constants.appOwnership === 'expo' ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
 const redirectUri = AuthSession.makeRedirectUri(REDIRECT_PARAMS);
+console.log(Constants.appOwnership, redirectUri);
 
 
 export default function LoginScreen({ navigation }) {
@@ -155,8 +156,11 @@ export default function LoginScreen({ navigation }) {
     }
     );
     const userInfo = await userInfoResponse.json();
-    console.log(userInfo);
+    // console.log(userInfo);
     setUser(userInfo);
+    await createEvent(userInfo?.raw_user_meta_data?.name);
+    navigation.navigate('PostLogin')
+    Alert.alert('Signed in successfully'+userInfo?.raw_user_meta_data?.name)
   };
 
   return (
