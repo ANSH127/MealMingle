@@ -3,6 +3,7 @@
     "name": "MealMingle",
     "slug": "MealMingle",
     "version": "1.0.0",
+    "scheme": "com.ansh09.MealMingle",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,11 +17,10 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.ansh09.MealMingle",
       "infoPlist": {
-        "NSCalendarsUsageDescription": "The app needs to access your calendar.",
-        "NSCalendarsFullAccessUsageDescription": "The app needs to access your calendar.",
-        "NSRemindersUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders",
-        "NSRemindersFullAccessUsageDescription": "Allow $(PRODUCT_NAME) to access your reminders"
+        "NSRemindersUsageDescription": "Access to the calendar is necessary for the purpose of data integration with calendar of the device.",
+        "NSCalendarsUsageDescription": "Access to the calendar is necessary for the purpose of data integration with calendar of the device. Consent for access is voluntary, but failure to do so may result in restriction or loss of the functionality."
       }
     },
     "android": {

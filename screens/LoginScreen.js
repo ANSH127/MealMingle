@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView,Platform } from 'react-native'
+import { View, Text, Image, TouchableWithoutFeedback, Keyboard, Alert, KeyboardAvoidingView, Platform } from 'react-native'
 import React from 'react'
 import { colors } from '../theme'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -14,11 +14,40 @@ import { signInWithEmailAndPassword } from 'firebase/auth'
 import * as Calendar from 'expo-calendar';
 
 
+import * as WebBrowser from "expo-web-browser";
+import * as Google from "expo-auth-session/providers/google";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as AuthSession from 'expo-auth-session';
+import Constants from 'expo-constants';
+
+
+WebBrowser.maybeCompleteAuthSession();
+
+const EXPO_REDIRECT_PARAMS = { useProxy: true, projectNameForProxy: '@ansh09/MealMingle' };
+const NATIVE_REDIRECT_PARAMS = { native: "com.ansh09.MealMingle://" };
+const REDIRECT_PARAMS = Constants.appOwnership === 'expo' ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
+const redirectUri = AuthSession.makeRedirectUri(REDIRECT_PARAMS);
+
+
 export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = React.useState(false)
   const [email, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
+
+
+  const [accessToken, setAccessToken] = React.useState(null);
+  const [user, setUser] = React.useState(null);
+  const [request, response, promptAsync] = Google.useAuthRequest({
+    clientId: "602772851359-ji87c6mjlec76e5bn4tmseoo0j5nnbio.apps.googleusercontent.com",
+    iosClientId: "602772851359-n15st6gtbjqt1v59r215cg26aekctk7e.apps.googleusercontent.com",
+    androidClientId: "602772851359-t0c32s210s4liuak7aa1j3ivnu4lsmr2.apps.googleusercontent.com",
+    redirectUri
+    
+    
+  }
+
+  );
 
   const handleSignIn = async () => {
     if (email === '' || password === '') {
@@ -73,9 +102,9 @@ export default function LoginScreen({ navigation }) {
 
       };
       if (expoCalendar) {
-        
 
-        const eventID =await Calendar.createEventAsync(expoCalendar.id, event);
+
+        const eventID = await Calendar.createEventAsync(expoCalendar.id, event);
         console.log(`Created a new event with id ${eventID}`);
       }
 
@@ -107,6 +136,29 @@ export default function LoginScreen({ navigation }) {
     const defaultCalendar = await Calendar.getDefaultCalendarAsync();
     return defaultCalendar.source;
   }
+
+
+  React.useEffect(() => {
+    if (response?.type === 'success') {
+      setAccessToken(response.authentication.accessToken);
+      accessToken && fetchUserInfo();
+
+    }
+  }, [response, accessToken]);
+
+  const fetchUserInfo = async () => {
+    const userInfoResponse = await fetch(
+      `https://www.googleapis.com/userinfo/v2/me`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+    );
+    const userInfo = await userInfoResponse.json();
+    console.log(userInfo);
+    setUser(userInfo);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
 
@@ -179,10 +231,10 @@ export default function LoginScreen({ navigation }) {
           </View>
 
           {/* // Google and Facebook buttons */}
-          <View className='flex-row justify-center items-center py-5'>
+          <TouchableOpacity className='flex-row justify-center items-center py-5' onPress={() => promptAsync()} >
             <Image source={require('../assets/images/googleIcon.png')} style={{ width: 50, height: 50 }} />
 
-          </View>
+          </TouchableOpacity>
 
 
           <View className='flex-row justify-center mt-2'>
