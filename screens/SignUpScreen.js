@@ -22,9 +22,16 @@ export default function SignUpScreen({ navigation }) {
   const [isTermsChecked, setIsTermsChecked] = React.useState(false);
 
   const handleSignUp = async () => {
-    if (username === '' || email === '' || password === '' || !isTermsChecked) {
+    
+
+    if (username === '' || email === '' || password === '' ) {
       Alert.alert('Please fill all the fields')
-    } else {
+
+    }
+    else if (!isTermsChecked) {
+      Alert.alert('Please agree to the terms and conditions')
+    }
+     else {
       setLoading(true)
       try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password)
