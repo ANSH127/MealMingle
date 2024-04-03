@@ -27,8 +27,7 @@ const EXPO_REDIRECT_PARAMS = { useProxy: true, projectNameForProxy: '@ansh09/Mea
 const NATIVE_REDIRECT_PARAMS = { native: "com.ansh09.MealMingle://" };
 const REDIRECT_PARAMS = Constants.appOwnership === 'expo' ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
 const redirectUri = AuthSession.makeRedirectUri(REDIRECT_PARAMS);
-console.log(Constants.appOwnership, redirectUri);
-
+// console.log(Constants.appOwnership, redirectUri);
 
 export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = React.useState(false)
